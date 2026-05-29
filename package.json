@@ -1,0 +1,14 @@
+{
+  "name": "cursor-buddy-mvp",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build": "pnpm -r --filter @cursor-buddy/protocol --filter cursor-buddy-extension --filter cursor-buddy-desktop build",
+    "watch": "pnpm -r --parallel watch",
+    "start:desktop": "pnpm --filter cursor-buddy-desktop start"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

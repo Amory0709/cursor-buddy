@@ -1,0 +1,82 @@
+{
+  "name": "cursor-buddy-extension",
+  "displayName": "Cursor Buddy",
+  "description": "A Cursor companion that tracks workspace activity and opens a focus buddy desktop window.",
+  "version": "0.1.0",
+  "private": true,
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:cursorBuddy.openAssistant",
+    "onCommand:cursorBuddy.stopAssistant",
+    "onCommand:cursorBuddy.sendSnapshot"
+  ],
+  "main": "dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cursorBuddy.openAssistant",
+        "title": "Cursor Buddy: Open Assistant"
+      },
+      {
+        "command": "cursorBuddy.stopAssistant",
+        "title": "Cursor Buddy: Stop Assistant"
+      },
+      {
+        "command": "cursorBuddy.sendSnapshot",
+        "title": "Cursor Buddy: Send Activity Snapshot"
+      }
+    ],
+    "configuration": {
+      "title": "Cursor Buddy",
+      "properties": {
+        "cursorBuddy.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Open Cursor Buddy automatically when the extension activates."
+        },
+        "cursorBuddy.focusMinutes": {
+          "type": "number",
+          "default": 25,
+          "minimum": 1,
+          "description": "Default focus session length in minutes."
+        },
+        "cursorBuddy.breakMinutes": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "description": "Default break session length in minutes."
+        },
+        "cursorBuddy.desktopCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Optional command used to launch the desktop assistant."
+        },
+        "cursorBuddy.desktopArgs": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional arguments passed to cursorBuddy.desktopCommand."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json --watch --preserveWatchOutput"
+  },
+  "dependencies": {
+    "@cursor-buddy/protocol": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "@types/vscode": "^1.96.0",
+    "typescript": "^5.9.3"
+  }
+}

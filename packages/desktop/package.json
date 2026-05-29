@@ -1,0 +1,19 @@
+{
+  "name": "cursor-buddy-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "start": "electron dist/main.js"
+  },
+  "dependencies": {
+    "@cursor-buddy/protocol": "workspace:*",
+    "electron": "^39.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "typescript": "^5.9.3"
+  }
+}
