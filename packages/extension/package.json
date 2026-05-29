@@ -36,7 +36,7 @@
       "properties": {
         "cursorBuddy.autoStart": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Open Cursor Buddy automatically when the extension activates."
         },
         "cursorBuddy.focusMinutes": {

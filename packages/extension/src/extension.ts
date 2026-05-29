@@ -239,6 +239,7 @@ class DesktopAssistantLauncher implements vscode.Disposable {
   private process: ChildProcessWithoutNullStreams | undefined;
   private stdoutBuffer = '';
   private readonly commandEmitter = new vscode.EventEmitter<DesktopCommandPayload>();
+  private readonly outputChannel = vscode.window.createOutputChannel('Cursor Buddy');
 
   constructor(private readonly context: vscode.ExtensionContext) {}
 
@@ -258,10 +259,12 @@ class DesktopAssistantLauncher implements vscode.Disposable {
     const launchTarget = this.resolveLaunchTarget();
     if (launchTarget === null) {
       await vscode.window.showWarningMessage(
-        'Cursor Buddy desktop app is not built yet. Run pnpm install and pnpm build in tools/cursor-buddy first.',
+        'Cursor Buddy desktop app is not built yet. Run pnpm install and pnpm build in the cursor-buddy repo first.',
       );
       return;
     }
+
+    this.outputChannel.appendLine(`Launching desktop assistant: ${launchTarget.command} ${launchTarget.args.join(' ')}`);
 
     this.process = spawn(launchTarget.command, launchTarget.args, {
       cwd: launchTarget.cwd,
@@ -274,12 +277,19 @@ class DesktopAssistantLauncher implements vscode.Disposable {
 
     this.process.stdout.on('data', (chunk: Buffer) => this.handleStdout(chunk));
     this.process.stderr.on('data', (chunk: Buffer) => {
-      console.error(`[Cursor Buddy desktop] ${chunk.toString('utf8')}`);
+      this.outputChannel.appendLine(`[desktop stderr] ${chunk.toString('utf8')}`);
     });
-    this.process.on('exit', () => {
+    this.process.on('error', (error) => {
+      this.outputChannel.appendLine(`[desktop error] ${error.message}`);
+      void vscode.window.showErrorMessage(`Cursor Buddy failed to start: ${error.message}`);
+    });
+    this.process.on('exit', (code, signal) => {
+      this.outputChannel.appendLine(`Desktop assistant exited. code=${code ?? 'null'} signal=${signal ?? 'null'}`);
       this.process = undefined;
       this.stdoutBuffer = '';
     });
+
+    void vscode.window.showInformationMessage('Cursor Buddy desktop assistant started.');
   }
 
   stop(): void {
@@ -299,6 +309,7 @@ class DesktopAssistantLauncher implements vscode.Disposable {
   dispose(): void {
     this.stop();
     this.commandEmitter.dispose();
+    this.outputChannel.dispose();
   }
 
   private handleStdout(chunk: Buffer): void {

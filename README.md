@@ -39,12 +39,20 @@ This keeps the extension and desktop UI loosely coupled. The transport can later
 ## Development
 
 ```powershell
-cd tools/cursor-buddy
+cd C:\Projects\LiveProduct\cursor-buddy
 pnpm install
 pnpm build
 ```
 
-Then run/debug `packages/extension` as a VS Code extension. The extension expects the desktop package to be built and to have Electron installed.
+Then run/debug `packages/extension` as a VS Code extension:
+
+```powershell
+cursor --extensionDevelopmentPath="C:\Projects\LiveProduct\cursor-buddy\packages\extension"
+```
+
+The helper now opens automatically by default. You can also open it manually from the command palette with `Cursor Buddy: Open Assistant`, or click the `Buddy` status bar item.
+
+If no window appears, check `Output > Cursor Buddy` in Cursor. The extension expects the desktop package to be built and to have Electron installed.
 
 For local development the default desktop command is resolved from:
 
@@ -58,6 +66,6 @@ You can override it with:
 ```json
 {
   "cursorBuddy.desktopCommand": "C:\\path\\to\\electron.cmd",
-  "cursorBuddy.desktopArgs": ["C:\\path\\to\\tools\\cursor-buddy\\packages\\desktop\\dist\\main.js"]
+  "cursorBuddy.desktopArgs": ["C:\\path\\to\\cursor-buddy\\packages\\desktop\\dist\\main.js"]
 }
 ```
