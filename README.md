@@ -54,6 +54,38 @@ The helper now opens automatically by default. You can also open it manually fro
 
 If no window appears, check `Output > Cursor Buddy` in Cursor. The extension expects the desktop package to be built and to have Electron installed.
 
+## How I Started It Locally
+
+Use this flow when testing the MVP before packaging it as a VSIX.
+
+1. Install dependencies and build all packages:
+
+```powershell
+cd C:\Projects\LiveProduct\cursor-buddy
+pnpm install
+pnpm build
+```
+
+2. Optional sanity check: start only the Electron desktop helper.
+
+```powershell
+pnpm --filter cursor-buddy-desktop start
+```
+
+If this works, a small `Cursor Buddy` floating window appears near the top-right of the screen. This verifies that Electron, the desktop bundle, and the UI can run independently from Cursor.
+
+3. Start Cursor with the extension loaded in development mode:
+
+```powershell
+cursor --extensionDevelopmentPath="C:\Projects\LiveProduct\cursor-buddy\packages\extension"
+```
+
+4. In the new Cursor window, the assistant should open automatically because `cursorBuddy.autoStart` defaults to `true`.
+
+5. If it does not appear, run `Cursor Buddy: Open Assistant` from the command palette or click the `Buddy` status bar item.
+
+6. For startup diagnostics, open `View > Output` and select `Cursor Buddy`. A successful launch writes the desktop command that the extension used.
+
 For local development the default desktop command is resolved from:
 
 ```text
